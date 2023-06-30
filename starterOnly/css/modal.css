@@ -366,7 +366,7 @@ input[data-error]::after {
 /* custom select styles */
 .custom-select {
   position: relative;
-  font-family: Arial;
+  font-family: Arial, serif;
   font-size: 1.1rem;
   font-weight: normal;
 }
@@ -574,7 +574,7 @@ footer {
   display: block;
 }
 
-.notActive {
+.inactive {
   display: none;
 }
 

@@ -1,6 +1,6 @@
 // Fonction permettant l'ajout de la classe 'responsive' pour gérer le menu en version mobile.
 function editNav() {
-  var x = document.getElementById("myTopnav");
+  let x = document.getElementById("myTopnav");
   if (x.className === "topnav") {
     x.className += " responsive";
   } else {
@@ -55,9 +55,10 @@ const messageRemerciement = document.getElementById("modalRemerciement");
 const btnMerci = document.getElementById("btn-merci");
 
 // Variables pour les expressions régulières.
-const firstNameRegex = /^[A-Za-zÀ-ÿ -]+$/;
-// On accepte les chiffre, le point, le tiret et l'undersocre a gauche de @ on accepte la même chose après, puis après le point uniquement des lettres, 2 ou 4 max contexte global et inseensible a la casse.
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const fullNameRegex = /^[A-Za-zÀ-ÿ -]+$/;
+// On autorise toutes les lettres, nombres, point, tirets et underscore avant le @, puis toutes les lettres, nombres et tirets avant le . toutes les lettres, idem pour l'extension optionnelle.
+// regex universelle /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+const emailRegex = /^([a-z\d\.-_]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/i;
 // On crée plusieurs groupe pour autoriser les différents chiffres possible dans une date, les slash, et on contrôle que la date ne dépasse pas 4 chiffres.
 const birthdateRegex =
   /^(19\d{2}|2[0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
@@ -71,45 +72,33 @@ formEl.addEventListener("submit", function (e) {
   validate();
 });
 
-// fonction pour valider le prénom
-function firstNameValidation() {
-  if (
-    firstNameEl.value.trim() === "" ||
-    !firstNameRegex.test(firstNameEl.value)
-  ) {
+/**
+ * fonction pour valider le prénom et le nom de l'utilisateur
+ *
+ * @param inputValue permet d'utiliser le prénom et le nom avec la même focntion
+ * @param infos {string} on passe soit "prenom" soit "nom" pour adapter le message d'erreur.
+ * @returns {boolean}
+ */
+function fullNameValidation(inputValue, infos) {
+  if (inputValue.value.trim() === "" || !fullNameRegex.test(inputValue.value)) {
     // On ajoute l'attribut true "data-error-visible" à la div parent + le contenu de data-error
-    firstNameEl.parentElement.setAttribute(
+    inputValue.parentElement.setAttribute(
       "data-error",
-      "Veuillez entrer 2 caractères ou plus pour le champ du prénom"
+      `Veuillez entrer 2 caractères ou plus pour le champ du ${infos}`
     );
-    firstNameEl.parentElement.setAttribute("data-error-visible", true);
+    inputValue.parentElement.setAttribute("data-error-visible", true);
   } else {
     // Sinon, on enlève l'attribut "data-error-visible"
-    firstNameEl.parentElement.setAttribute("data-error-visible", false);
+    inputValue.parentElement.setAttribute("data-error-visible", false);
     return true;
   }
 }
 
-// Fonction pour valider le nom de famille
-function lastNameValidation() {
-  if (
-    lastNameEl.value.trim() === "" ||
-    !firstNameRegex.test(firstNameEl.value)
-  ) {
-    // On ajoute l'attribut true "data-error-visible" à la div parent + le contenu de data-error
-    lastNameEl.parentElement.setAttribute(
-      "data-error",
-      "Veuillez entrer 2 caractères ou plus pour le champ du prénom"
-    );
-    lastNameEl.parentElement.setAttribute("data-error-visible", true);
-  } else {
-    // Sinon, on enlève l'attribut "data-error-visible"
-    lastNameEl.parentElement.setAttribute("data-error-visible", false);
-    return true;
-  }
-}
-
-// Fonction pour valider le mail
+/**
+ * Fonction pour valider le mail
+ *
+ * @returns {boolean}
+ */
 function emailValidation() {
   if (emailEl.value.trim() === "" || !emailRegex.test(emailEl.value)) {
     emailEl.parentElement.setAttribute(
@@ -123,7 +112,11 @@ function emailValidation() {
   }
 }
 
-// fonction pour vérifier que la date soir présente et valide.
+/**
+ * fonction pour vérifier que la date soir présente et valide.
+ *
+ * @returns {boolean}
+ */
 function birthdateValidation() {
   if (
     birthdateEl.value.trim() === "" ||
@@ -140,7 +133,11 @@ function birthdateValidation() {
   }
 }
 
-// fonction pour vérifier qu'un nombre soir rentré au niveau du nombre de tournoi.
+/**
+ * fonction pour vérifier qu'un nombre soir rentré au niveau du nombre de tournoi.
+ *
+ * @returns {boolean}
+ */
 function quantityValidation() {
   if (quantityEl.value.trim() === "" || !quantityRegex.test(quantityEl.value)) {
     quantityEl.parentElement.setAttribute(
@@ -154,7 +151,12 @@ function quantityValidation() {
   }
 }
 
-//Fonction pour valider les boutons radio et vérifier qu'au moins une ville à éré selectionnée.
+// TODO: vérifier les selecteurs.
+/**
+ * Fonction pour valider les boutons radio et vérifier qu'au moins une ville à éré selectionnée.
+ *
+ * @returns {boolean}
+ */
 function cityValidation() {
   let btnRadioChecked = false;
 
@@ -177,7 +179,11 @@ function cityValidation() {
   }
 }
 
-// Fonction pour être sur que la case à cocher des conditions d'utilisation est checked
+/**
+ * Fonction pour être sur que la case à cocher des conditions d'utilisation est checked
+ *
+ * @returns {boolean}
+ */
 function checkboxValidation() {
   if (!checkboxEl.checked) {
     checkboxEl.parentElement.setAttribute(
@@ -191,34 +197,41 @@ function checkboxValidation() {
   return true;
 }
 
-// Fonction pour faire apparaître la modale de confirmation
+/**
+ * Fonction pour faire apparaître la modale de confirmation
+ */
 function modalRemerciement() {
   //Masquer le formulaire d'origine
-  formEl.className = "notActive";
+  formEl.className = "inactive";
 
   //Afficher le message et le bouton de fermeture
   messageRemerciement.className = "active";
 
   //Masque le bouton pour fermer la fenêtre car si utilisateur clique dessus, pas de submit()
-  modalCloseEl.className = "notActive";
+  modalCloseEl.className = "inactive";
 }
 
 btnMerci.addEventListener("click", function event() {
   //Réactiver le formulaire d'origine --> pas besoin puisque lors du lancement de la modale, display : block
   // form.className = 'Active';
   //Masquer le message
-  messageRemerciement.className = "notActive";
+  messageRemerciement.className = "inactive";
   // forcer la fermeture de la modale
   closeModal();
   formEl.submit();
 });
 
-// Fonction validate lancée lors de la soumission du formulaire.
+// TODO: js doc
+/**
+ * Fonction validate lancée lors de la soumission du formulaire.
+ *
+ * @returns {boolean}
+ */
 function validate() {
   //e.preventDefault();
 
-  firstNameValidation();
-  lastNameValidation();
+  fullNameValidation(firstNameEl, "prénom");
+  fullNameValidation(lastNameEl, "nom");
   emailValidation();
   birthdateValidation();
   quantityValidation();
@@ -226,15 +239,14 @@ function validate() {
   checkboxValidation();
 
   if (
-    firstNameValidation() &&
-    lastNameValidation() &&
+    fullNameValidation(firstNameEl, "prénom") &&
+    fullNameValidation(lastNameEl, "nom") &&
     emailValidation() &&
     birthdateValidation() &&
     quantityValidation() &&
     cityValidation() &&
     checkboxValidation()
   ) {
-    console.log("submit");
     modalRemerciement();
     return true;
   } else {
