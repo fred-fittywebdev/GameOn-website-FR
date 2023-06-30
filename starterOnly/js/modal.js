@@ -45,6 +45,7 @@ modalCloseEl.addEventListener("click", closeModal);
 // Elements du DOM et variables
 const firstNameEl = document.querySelector("#first");
 const lastNameEl = document.querySelector("#last");
+const inputs = document.querySelectorAll(".inputs");
 const emailEl = document.querySelector("#email");
 const birthdateEl = document.querySelector("#birthdate");
 const quantityEl = document.querySelector("#quantity");
@@ -93,6 +94,49 @@ function fullNameValidation(inputValue, infos) {
     return true;
   }
 }
+
+/**
+ * Ici on récupère l'attribut name de l'input dans lequel on entre des données.
+ * On utilise un switch pour detecter et implémenter l'affichage des erreurs en live.
+ * Cette validation ne se fait que lorsqu'on tape quelque chose dans un des deux inputs.
+ *
+ * @param e permet de récuperer l'attribut name des deux inputs.
+ */
+function firstNameLiveValidation(e) {
+  let inputContent = e.target.value;
+
+  switch (e.target.name) {
+    case "first":
+      console.log(e.target.name);
+      if (inputContent.length < 2 || !fullNameRegex.test(inputContent)) {
+        firstNameEl.parentElement.setAttribute(
+          "data-error",
+          `Veuillez entrer 2 caractères ou plus pour le champ du prenom`
+        );
+        firstNameEl.parentElement.setAttribute("data-error-visible", true);
+      } else {
+        firstNameEl.parentElement.setAttribute("data-error-visible", false);
+      }
+      break;
+    case "last":
+      console.log(e.target.name);
+      if (inputContent.length < 2 || !fullNameRegex.test(inputContent)) {
+        lastNameEl.parentElement.setAttribute(
+          "data-error",
+          `Veuillez entrer 2 caractères ou plus pour le champ du nom`
+        );
+        lastNameEl.parentElement.setAttribute("data-error-visible", true);
+      } else {
+        lastNameEl.parentElement.setAttribute("data-error-visible", false);
+      }
+      break;
+  }
+}
+
+// ici on boucle sur les deux inputs du nom et du prénom afin de faire les validations dans la fonction au dessus.
+inputs.forEach((input) => {
+  input.addEventListener("keyup", firstNameLiveValidation);
+});
 
 /**
  * Fonction pour valider le mail
@@ -221,7 +265,6 @@ btnMerci.addEventListener("click", function event() {
   formEl.submit();
 });
 
-// TODO: js doc
 /**
  * Fonction validate lancée lors de la soumission du formulaire.
  *
