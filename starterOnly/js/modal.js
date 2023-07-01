@@ -217,7 +217,7 @@ let invalidChars = ["-", "+", "e", "."];
  * @param e permet de détecter la touche qui est enfoncée, et anisi de récupérer la valeur de key
  */
 function onlyNumber(e) {
-  if (invalidChars.includes(e.key)) {
+  if (invalidChars.includes(e.key) || !quantityRegex.test(e.key)) {
     e.preventDefault();
     quantityEl.parentElement.setAttribute(
       "data-error",
