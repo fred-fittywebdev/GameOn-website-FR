@@ -102,7 +102,7 @@ function fullNameValidation(inputValue, infos) {
  *
  * @param e permet de récuperer l'attribut name des deux inputs.
  */
-function firstNameLiveValidation(e) {
+function inputsTextLiveValidation(e) {
   let inputContent = e.target.value;
 
   switch (e.target.name) {
@@ -130,12 +130,22 @@ function firstNameLiveValidation(e) {
         lastNameEl.parentElement.setAttribute("data-error-visible", false);
       }
       break;
+    case "email":
+      if (inputContent.trim() === "" || !emailRegex.test(emailEl.value)) {
+        emailEl.parentElement.setAttribute(
+          "data-error",
+          "Veuillez renseigner votre email"
+        );
+        emailEl.parentElement.setAttribute("data-error-visible", true);
+      } else {
+        emailEl.parentElement.setAttribute("data-error-visible", false);
+      }
   }
 }
 
-// ici on boucle sur les deux inputs du nom et du prénom afin de faire les validations dans la fonction au dessus.
+// ici on boucle sur les trois inputs nom, prénom et email afin de faire les validations dans la fonction au dessus.
 inputs.forEach((input) => {
-  input.addEventListener("keyup", firstNameLiveValidation);
+  input.addEventListener("keyup", inputsTextLiveValidation);
 });
 
 /**
