@@ -205,6 +205,32 @@ function quantityValidation() {
   }
 }
 
+// Empêcher la possibilité de taper les caractères suivants dans l'input: -, +, e, .
+
+// Je crée un tableau avec les valeurs que je veux interdire
+let invalidChars = ["-", "+", "e", "."];
+
+/**
+ * Fonction qui determine si la touche enfoncée correspond aux caractères inclus dans la variable invlaidChars
+ * Si c'est le cas on annule l'évenement par défaut qui est l'affichage du caractère correspondant a la clé
+ *
+ * @param e permet de détecter la touche qui est enfoncée, et anisi de récupérer la valeur de key
+ */
+function onlyNumber(e) {
+  if (invalidChars.includes(e.key)) {
+    e.preventDefault();
+    quantityEl.parentElement.setAttribute(
+      "data-error",
+      "Veuillez renseigner une quantité"
+    );
+    quantityEl.parentElement.setAttribute("data-error-visible", true);
+  } else {
+    quantityEl.parentElement.setAttribute("data-error-visible", false);
+  }
+}
+
+quantityEl.addEventListener("keydown", onlyNumber);
+
 // TODO: vérifier les selecteurs.
 /**
  * Fonction pour valider les boutons radio et vérifier qu'au moins une ville à éré selectionnée.
