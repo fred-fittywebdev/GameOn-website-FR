@@ -578,6 +578,10 @@ footer {
   display: none;
 }
 
+.form-valid {
+  box-shadow: 0 0 0 4px #279e7a;
+}
+
 /*message confirmation*/
 .message {
   display: flex;

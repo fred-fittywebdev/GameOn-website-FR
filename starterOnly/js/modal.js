@@ -61,9 +61,10 @@ const fullNameRegex = /^[A-Za-zÀ-ÿ -]+$/;
 // regex universelle /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 const emailRegex = /^([a-z\d\.-_]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/i;
 // On crée plusieurs groupe pour autoriser les différents chiffres possible dans une date, les slash, et on contrôle que la date ne dépasse pas 4 chiffres.
+// /^(?:(?:19|20)\d{2}[-](?:0?[1-9]|1[012])[-](?:0[1-9]|[12]\d|3[01])|(?:0?[1-9]|[12]\d|3[01])/(?:0?[1-9]|1[012])/(?:19|20)\d{2})$/
 const birthdateRegex =
   /^(19\d{2}|2[0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
-const quantityRegex = /^[0-9]/;
+const quantityRegex = /^[0-9]$/;
 
 // Récupération du formulaire pour gérer la soumission et lancer la focntion validate() onSubmit
 const formEl = document.getElementById("form");
@@ -72,6 +73,16 @@ formEl.addEventListener("submit", function (e) {
 
   validate();
 });
+
+function showValidIndicator(inputCheck) {
+  // show valid indicator
+  inputCheck.classList.add("form-valid");
+
+  // remove visual indicator
+  setTimeout(() => {
+    inputCheck.classList.remove("form-valid");
+  }, 2000);
+}
 
 /**
  * fonction pour valider le prénom et le nom de l'utilisateur
@@ -107,7 +118,6 @@ function inputsTextLiveValidation(e) {
 
   switch (e.target.name) {
     case "first":
-      console.log(e.target.name);
       if (inputContent.length < 2 || !fullNameRegex.test(inputContent)) {
         firstNameEl.parentElement.setAttribute(
           "data-error",
@@ -116,10 +126,10 @@ function inputsTextLiveValidation(e) {
         firstNameEl.parentElement.setAttribute("data-error-visible", true);
       } else {
         firstNameEl.parentElement.setAttribute("data-error-visible", false);
+        showValidIndicator(firstNameEl);
       }
       break;
     case "last":
-      console.log(e.target.name);
       if (inputContent.length < 2 || !fullNameRegex.test(inputContent)) {
         lastNameEl.parentElement.setAttribute(
           "data-error",
@@ -128,6 +138,7 @@ function inputsTextLiveValidation(e) {
         lastNameEl.parentElement.setAttribute("data-error-visible", true);
       } else {
         lastNameEl.parentElement.setAttribute("data-error-visible", false);
+        showValidIndicator(lastNameEl);
       }
       break;
     case "email":
@@ -139,6 +150,7 @@ function inputsTextLiveValidation(e) {
         emailEl.parentElement.setAttribute("data-error-visible", true);
       } else {
         emailEl.parentElement.setAttribute("data-error-visible", false);
+        showValidIndicator(emailEl);
       }
   }
 }
@@ -226,6 +238,7 @@ function onlyNumber(e) {
     quantityEl.parentElement.setAttribute("data-error-visible", true);
   } else {
     quantityEl.parentElement.setAttribute("data-error-visible", false);
+    showValidIndicator(quantityEl);
   }
 }
 
@@ -258,6 +271,8 @@ function cityValidation() {
     return true;
   }
 }
+
+cityValidationEl.addEventListener("change", function (e) {});
 
 /**
  * Fonction pour être sur que la case à cocher des conditions d'utilisation est checked
