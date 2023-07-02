@@ -74,6 +74,11 @@ formEl.addEventListener("submit", function (e) {
   validate();
 });
 
+/**
+ * Permet d'afficher un indicateur visuel vert pendant 2 secondes lorsque les consignes de validations sont respectées
+ *
+ * @param inputCheck correspond a l'inpuit sur lequel on veut afficher cet indicateur.
+ */
 function showValidIndicator(inputCheck) {
   // show valid indicator
   inputCheck.classList.add("form-valid");
