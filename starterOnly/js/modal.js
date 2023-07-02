@@ -184,14 +184,15 @@ function emailValidation() {
 }
 
 /**
- * fonction pour vérifier que la date soir présente et valide.
+ * fonction pour vérifier que la date soit présente, valide et pas dans le futur.
  *
  * @returns {boolean}
  */
 function birthdateValidation() {
   if (
     birthdateEl.value.trim() === "" ||
-    !birthdateRegex.test(birthdateEl.value)
+    !birthdateRegex.test(birthdateEl.value) ||
+    birthdateEl.value > new Date().toISOString().slice(0, 10)
   ) {
     birthdateEl.parentElement.setAttribute(
       "data-error",
