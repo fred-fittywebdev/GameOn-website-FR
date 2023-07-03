@@ -13,7 +13,7 @@
 /* Landing Page */
 
 body {
-  margin: 0;
+  /*margin: 0;*/
   display: flex;
   flex-direction: column;
   /* background-image: url("background.png"); */
@@ -65,6 +65,8 @@ img {
 
 .topnav a.active {
   background-color: #ff0000;
+  text-decoration: underline;
+  text-underline-offset: 5px;
   color: #ffffff;
   border-radius: 15px;
 }
@@ -74,6 +76,12 @@ img {
 }
 
 @media screen and (max-width: 768px) {
+  .topnav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   .topnav a {
     display: none;
   }
@@ -124,6 +132,7 @@ main {
   margin: 1px 20px 15px;
   border-radius: 2rem;
   text-align: justify;
+  height: 41.0625rem /* 657/16 */;
 }
 
 .modal-btn {
@@ -229,7 +238,7 @@ input {
   display: block;
   margin-top: 7px;
   margin-bottom: 7px;
-  text-align: right;
+  text-align: left;
   line-height: 0.3;
   opacity: 0;
   transition: 0.3s;
@@ -438,7 +447,7 @@ input[data-error]::after {
 }
 
 .hero-section {
-  min-height: 93vh;
+  min-height: 100%;
   border-radius: 10px;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
@@ -473,25 +482,26 @@ input[data-error]::after {
 }
 
 .hero-headline {
-  font-size: 6rem;
-  font-weight: normal;
+  font-size: 96px;
+  font-weight: 500;
   white-space: nowrap;
 }
 
 .hero-text {
   width: 146%;
-  font-weight: normal;
-  margin-top: 57px;
+  font-weight: 400;
+  margin-top: 73px;
   padding: 0;
+  font-size: 1.5rem /* 24/16 */;
 }
 
 .btn-signup {
   outline: none;
   text-transform: capitalize;
-  font-size: 1.3rem;
-  padding: 15px 23px;
-  margin: 0;
-  margin-top: 59px;
+  font-size: 1.5625rem /* 25/16 */;
+  padding: 11px 30px;
+  /*margin: 0;*/
+  margin: 73px 0 0 0;
 }
 
 .hero-img {
@@ -567,6 +577,47 @@ footer {
   .copyrights {
     margin-top: 50px;
     text-align: center;
+  }
+}
+
+@media screen and (max-width: 540px) {
+  .header-logo {
+    margin-left: 30px;
+  }
+
+  /*.header-logo img {*/
+  /*  padding: 0;*/
+  /*}*/
+
+  .main-navbar {
+    margin-right: 30px;
+  }
+
+  main {
+    height: auto;
+  }
+
+  .hero-headline {
+    font-size: 40px;
+    font-weight: 400;
+  }
+
+  .hero-content {
+    min-width: 373px;
+  }
+
+  .hero-text {
+    font-size: 13px;
+    margin-top: 20px;
+  }
+
+  .hero-img {
+    padding: 0 20px;
+    margin-top: 36px;
+  }
+
+  .hero-section .btn-signup {
+    font-size: 13px;
   }
 }
 
