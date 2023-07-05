@@ -8,6 +8,9 @@ function editNav() {
   }
 }
 
+// variables globales -> formulaires
+const formEl = document.getElementById("form");
+
 /*
 ---------- MODAL COMPONENT ----------
 */
@@ -25,6 +28,7 @@ function launchModal() {
 
 // Fonction permettant de fermer la modale.
 function closeModal() {
+  formEl.reset();
   modalbg.style.display = "none";
 }
 
@@ -67,7 +71,7 @@ const birthdateRegex =
 const quantityRegex = /^[0-9]$/;
 
 // Récupération du formulaire pour gérer la soumission et lancer la focntion validate() onSubmit
-const formEl = document.getElementById("form");
+
 formEl.addEventListener("submit", function (e) {
   e.preventDefault();
 
