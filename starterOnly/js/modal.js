@@ -21,6 +21,16 @@ const modalBtn = document.querySelectorAll(".modal-btn");
 const modalCloseEl = document.querySelector(".close");
 const formData = document.querySelectorAll(".formData");
 
+/**
+ * Permet de supprimer les message d'erreur et la bordure rouge autour des inputs.
+ */
+function initMessages() {
+  formData.forEach((formD) => {
+    formD.setAttribute("data-error", "");
+    formD.setAttribute("data-error-visible", false);
+  });
+}
+
 // Fonction permettant d'ouvrir la modale.
 function launchModal() {
   modalbg.style.display = "block";
@@ -28,6 +38,7 @@ function launchModal() {
 
 // Fonction permettant de fermer la modale.
 function closeModal() {
+  initMessages();
   formEl.reset();
   modalbg.style.display = "none";
 }
@@ -71,12 +82,36 @@ const birthdateRegex =
 const quantityRegex = /^[0-9]$/;
 
 // Récupération du formulaire pour gérer la soumission et lancer la focntion validate() onSubmit
-
 formEl.addEventListener("submit", function (e) {
   e.preventDefault();
 
   validate();
 });
+
+// création d'une variable pour les messages d'erreur, en cas de modifications il suffira de le faire ici.
+erroMessagesList = {
+  fullName: "Ce champ ne peut être vide et doit contenir 2 caractères minimum.",
+  email: "Veuillez entrer une adresse email valide.",
+  birthdayDate: "Veuillez entrer une date valide, antérieure a 2008",
+  nbTournoi: "Veuillez renseigner un chiffre uniquement",
+  cityChoice: "Veuillez choisir une option (ville) au minimum",
+  privacyPolicy: "veuillez accepter les conditions d'utilisation",
+};
+
+/**
+ *
+ * @param parentNode Element sur lequel on applique le setAttribute
+ * @param message message qui sera diffusé sur le formulaire
+ * @param check permet de savoir si l'attribut correspond a une erreur ou à un champ valide afin d'afficher ou d'enlever le message.
+ */
+function displayErrorMessages(parentNode, message, check) {
+  if (check === "error") {
+    parentNode.parentElement.setAttribute("data-error", message);
+    parentNode.parentElement.setAttribute("data-error-visible", true);
+  } else {
+    parentNode.parentElement.setAttribute("data-error-visible", false);
+  }
+}
 
 /**
  * Permet d'afficher un indicateur visuel vert pendant 2 secondes lorsque les consignes de validations sont respectées
@@ -102,15 +137,10 @@ function showValidIndicator(inputCheck) {
  */
 function fullNameValidation(inputValue, infos) {
   if (inputValue.value.trim() === "" || !fullNameRegex.test(inputValue.value)) {
-    // On ajoute l'attribut true "data-error-visible" à la div parent + le contenu de data-error
-    inputValue.parentElement.setAttribute(
-      "data-error",
-      `Veuillez entrer 2 caractères ou plus pour le champ du ${infos}`
-    );
-    inputValue.parentElement.setAttribute("data-error-visible", true);
+    displayErrorMessages(inputValue, erroMessagesList.fullName, "error");
   } else {
     // Sinon, on enlève l'attribut "data-error-visible"
-    inputValue.parentElement.setAttribute("data-error-visible", false);
+    displayErrorMessages(inputValue, "", "valid");
     return true;
   }
 }
@@ -128,37 +158,25 @@ function inputsTextLiveValidation(e) {
   switch (e.target.name) {
     case "first":
       if (inputContent.length < 2 || !fullNameRegex.test(inputContent)) {
-        firstNameEl.parentElement.setAttribute(
-          "data-error",
-          `Veuillez entrer 2 caractères ou plus pour le champ du prenom`
-        );
-        firstNameEl.parentElement.setAttribute("data-error-visible", true);
+        displayErrorMessages(firstNameEl, erroMessagesList.fullName, "error");
       } else {
-        firstNameEl.parentElement.setAttribute("data-error-visible", false);
+        displayErrorMessages(firstNameEl, "", "valid");
         showValidIndicator(firstNameEl);
       }
       break;
     case "last":
       if (inputContent.length < 2 || !fullNameRegex.test(inputContent)) {
-        lastNameEl.parentElement.setAttribute(
-          "data-error",
-          `Veuillez entrer 2 caractères ou plus pour le champ du nom`
-        );
-        lastNameEl.parentElement.setAttribute("data-error-visible", true);
+        displayErrorMessages(lastNameEl, erroMessagesList.fullName, "error");
       } else {
-        lastNameEl.parentElement.setAttribute("data-error-visible", false);
+        displayErrorMessages(lastNameEl, "", "valid");
         showValidIndicator(lastNameEl);
       }
       break;
     case "email":
       if (inputContent.trim() === "" || !emailRegex.test(emailEl.value)) {
-        emailEl.parentElement.setAttribute(
-          "data-error",
-          "Veuillez renseigner votre email"
-        );
-        emailEl.parentElement.setAttribute("data-error-visible", true);
+        displayErrorMessages(emailEl, erroMessagesList.email, "error");
       } else {
-        emailEl.parentElement.setAttribute("data-error-visible", false);
+        displayErrorMessages(emailEl, "", "valid");
         showValidIndicator(emailEl);
       }
       break;
@@ -167,7 +185,7 @@ function inputsTextLiveValidation(e) {
 
 // ici on boucle sur les trois inputs nom, prénom et email afin de faire les validations dans la fonction au dessus.
 inputs.forEach((input) => {
-  input.addEventListener("input", inputsTextLiveValidation);
+  input.addEventListener("keyup", inputsTextLiveValidation);
 });
 
 /**
@@ -177,13 +195,9 @@ inputs.forEach((input) => {
  */
 function emailValidation() {
   if (emailEl.value.trim() === "" || !emailRegex.test(emailEl.value)) {
-    emailEl.parentElement.setAttribute(
-      "data-error",
-      "Veuillez renseigner votre email"
-    );
-    emailEl.parentElement.setAttribute("data-error-visible", true);
+    displayErrorMessages(emailEl, erroMessagesList.email, "error");
   } else {
-    emailEl.parentElement.setAttribute("data-error-visible", false);
+    displayErrorMessages(emailEl, "", "valid");
     return true;
   }
 }
@@ -199,13 +213,9 @@ function birthdateValidation() {
     !birthdateRegex.test(birthdateEl.value) ||
     birthdateEl.value > new Date().toISOString().slice(0, 10)
   ) {
-    birthdateEl.parentElement.setAttribute(
-      "data-error",
-      "Veuillez renseigner votre date de naissance"
-    );
-    birthdateEl.parentElement.setAttribute("data-error-visible", true);
+    displayErrorMessages(birthdateEl, erroMessagesList.birthdayDate, "error");
   } else {
-    birthdateEl.parentElement.setAttribute("data-error-visible", false);
+    displayErrorMessages(birthdateEl, "", "valid");
     return true;
   }
 }
@@ -217,13 +227,9 @@ function birthdateValidation() {
  */
 function quantityValidation() {
   if (quantityEl.value.trim() === "" || !quantityRegex.test(quantityEl.value)) {
-    quantityEl.parentElement.setAttribute(
-      "data-error",
-      "Veuillez renseigner une quantité"
-    );
-    quantityEl.parentElement.setAttribute("data-error-visible", true);
+    displayErrorMessages(quantityEl, erroMessagesList.nbTournoi, "error");
   } else {
-    quantityEl.parentElement.setAttribute("data-error-visible", false);
+    displayErrorMessages(quantityEl, "", "valid");
     return true;
   }
 }
@@ -241,14 +247,9 @@ let invalidChars = ["-", "+", "e", "."];
  */
 function onlyNumber(e) {
   if (invalidChars.includes(e.key) || !quantityRegex.test(e.key)) {
-    e.preventDefault();
-    quantityEl.parentElement.setAttribute(
-      "data-error",
-      "Veuillez renseigner une quantité"
-    );
-    quantityEl.parentElement.setAttribute("data-error-visible", true);
+    displayErrorMessages(quantityEl, erroMessagesList.nbTournoi, "error");
   } else {
-    quantityEl.parentElement.setAttribute("data-error-visible", false);
+    displayErrorMessages(quantityEl, "", "valid");
     showValidIndicator(quantityEl);
   }
 }
@@ -273,13 +274,17 @@ function cityValidation() {
   }
 
   if (!btnRadioChecked) {
-    cityValidationEl.parentElement.setAttribute(
-      "data-error",
-      "Veuillez choisir une option"
+    displayErrorMessages(
+      cityValidationEl,
+      erroMessagesList.cityChoice,
+      "error"
     );
-    cityValidationEl.parentElement.setAttribute("data-error-visible", true);
   } else {
-    cityValidationEl.parentElement.setAttribute("data-error-visible", false);
+    displayErrorMessages(
+      cityValidationEl,
+      erroMessagesList.cityChoice,
+      "valid"
+    );
     return true;
   }
 }
@@ -293,14 +298,10 @@ cityValidationEl.addEventListener("change", function (e) {});
  */
 function checkboxValidation() {
   if (!checkboxEl.checked) {
-    checkboxEl.parentElement.setAttribute(
-      "data-error",
-      "Vous devez vérifier que vous acceptez les termes et conditions"
-    );
-    checkboxEl.parentElement.setAttribute("data-error-visible", true);
+    displayErrorMessages(checkboxEl, erroMessagesList.privacyPolicy, "error");
     return false;
   }
-  checkboxEl.parentElement.setAttribute("data-error-visible", false);
+  displayErrorMessages(checkboxEl, erroMessagesList.privacyPolicy, "valid");
   return true;
 }
 
