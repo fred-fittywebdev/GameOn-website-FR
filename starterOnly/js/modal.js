@@ -157,12 +157,13 @@ function inputsTextLiveValidation(e) {
         emailEl.parentElement.setAttribute("data-error-visible", false);
         showValidIndicator(emailEl);
       }
+      break;
   }
 }
 
 // ici on boucle sur les trois inputs nom, prénom et email afin de faire les validations dans la fonction au dessus.
 inputs.forEach((input) => {
-  input.addEventListener("keyup", inputsTextLiveValidation);
+  input.addEventListener("input", inputsTextLiveValidation);
 });
 
 /**
@@ -257,6 +258,7 @@ quantityEl.addEventListener("keydown", onlyNumber);
  * @returns {boolean}
  */
 function cityValidation() {
+  // console.log(document.querySelector('input[name="location"]:checked'));
   let btnRadioChecked = false;
 
   for (let i = 0; i < btnRadiosEl.length; i++) {
