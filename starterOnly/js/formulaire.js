@@ -16,6 +16,11 @@ const checkboxEl = document.getElementById("checkbox1");
 const messageRemerciement = document.getElementById("modalRemerciement");
 const btnMerci = document.getElementById("btn-merci");
 
+// Variable pour définir un age limite par rapport a une date, ici je choisis 14 ans donc 2007
+// Je ne récupère que la date au format AAAA-MM-DD
+const ageLimite = new Date("2010-01-01").toISOString().slice(0, 10);
+console.log(ageLimite);
+
 // Variables pour les expressions régulières.
 const fullNameRegex = /^[A-Za-zÀ-ÿ -]+$/;
 // On autorise toutes les lettres, nombres, point, tirets et underscore avant le @, puis toutes les lettres, nombres et tirets avant le . toutes les lettres, idem pour l'extension optionnelle.
@@ -38,7 +43,7 @@ formEl.addEventListener("submit", function (e) {
 const erroMessagesList = {
   fullName: "Ce champ ne peut être vide et doit contenir 2 caractères minimum.",
   email: "Veuillez entrer une adresse email valide.",
-  birthdayDate: "Veuillez entrer une date valide, antérieure a 2008",
+  birthdayDate: "Veuillez entrer une date valide, antérieure a 2010",
   nbTournoi: "Veuillez renseigner un chiffre uniquement",
   cityChoice: "Veuillez choisir une option (ville) au minimum",
   privacyPolicy: "veuillez accepter les conditions d'utilisation",
@@ -157,7 +162,8 @@ function birthdateValidation() {
   if (
     birthdateEl.value.trim() === "" ||
     !birthdateRegex.test(birthdateEl.value) ||
-    birthdateEl.value > new Date().toISOString().slice(0, 10)
+    birthdateEl.value > new Date().toISOString().slice(0, 10) ||
+    birthdateEl.value > ageLimite
   ) {
     displayErrorMessages(birthdateEl, erroMessagesList.birthdayDate, "error");
   } else {

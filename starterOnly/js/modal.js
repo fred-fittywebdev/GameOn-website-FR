@@ -1,9 +1,16 @@
+// Eléments du DOM et variables -> modale
+const modalbg = document.querySelector(".bground");
+const modalBtn = document.querySelectorAll(".modal-btn");
+const modalCloseEl = document.querySelector(".close");
+const formData = document.querySelectorAll(".formData");
+// Eléments du DOM et variables -> navigation
+let navigation = document.getElementById("myTopnav");
+
 /*
 ---------- NAVIGATION COMPONENT ----------
 */
 // Fonction permettant l'ajout de la classe 'responsive' pour gérer le menu en version mobile.
 function editNav() {
-  let navigation = document.getElementById("myTopnav");
   if (navigation.className === "topnav") {
     navigation.className += " responsive";
   } else {
@@ -17,12 +24,6 @@ function editNav() {
 /*
 ---------- MODAL COMPONENT ----------
 */
-
-// Eléments du DOM et variables
-const modalbg = document.querySelector(".bground");
-const modalBtn = document.querySelectorAll(".modal-btn");
-const modalCloseEl = document.querySelector(".close");
-const formData = document.querySelectorAll(".formData");
 
 /**
  * Permet de supprimer les message d'erreur et la bordure rouge autour des inputs.
