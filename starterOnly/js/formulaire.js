@@ -16,6 +16,10 @@ const checkboxEl = document.getElementById("checkbox1");
 const messageRemerciement = document.getElementById("modalRemerciement");
 const btnMerci = document.getElementById("btn-merci");
 
+// ici je déclare une variable qui me permettra de voir si le formulaire a été soumis au moins une fois
+// La validation en temps réel ne se fera que lorsque celui ci aura été soumis au moins une fois si nécéssaire.
+let formFirstValidation = false;
+
 // Variable pour définir un age limite par rapport a une date, ici je choisis 14 ans donc 2007
 // Je ne récupère que la date au format AAAA-MM-DD
 const ageLimite = new Date("2010-01-01").toISOString().slice(0, 10);
@@ -106,31 +110,34 @@ function fullNameValidation(inputValue, infos) {
 function inputsTextLiveValidation(e) {
   let inputContent = e.target.value;
 
-  switch (e.target.name) {
-    case "first":
-      if (inputContent.length < 2 || !fullNameRegex.test(inputContent)) {
-        displayErrorMessages(firstNameEl, erroMessagesList.fullName, "error");
-      } else {
-        displayErrorMessages(firstNameEl, "", "valid");
-        showValidIndicator(firstNameEl);
-      }
-      break;
-    case "last":
-      if (inputContent.length < 2 || !fullNameRegex.test(inputContent)) {
-        displayErrorMessages(lastNameEl, erroMessagesList.fullName, "error");
-      } else {
-        displayErrorMessages(lastNameEl, "", "valid");
-        showValidIndicator(lastNameEl);
-      }
-      break;
-    case "email":
-      if (inputContent.trim() === "" || !emailRegex.test(emailEl.value)) {
-        displayErrorMessages(emailEl, erroMessagesList.email, "error");
-      } else {
-        displayErrorMessages(emailEl, "", "valid");
-        showValidIndicator(emailEl);
-      }
-      break;
+  // Si une tentative de soumission du formulaire n'a pas encore été faite la validation en temps réel ne s'exécute pas.
+  if (formFirstValidation) {
+    switch (e.target.name) {
+      case "first":
+        if (inputContent.length < 2 || !fullNameRegex.test(inputContent)) {
+          displayErrorMessages(firstNameEl, erroMessagesList.fullName, "error");
+        } else {
+          displayErrorMessages(firstNameEl, "", "valid");
+          showValidIndicator(firstNameEl);
+        }
+        break;
+      case "last":
+        if (inputContent.length < 2 || !fullNameRegex.test(inputContent)) {
+          displayErrorMessages(lastNameEl, erroMessagesList.fullName, "error");
+        } else {
+          displayErrorMessages(lastNameEl, "", "valid");
+          showValidIndicator(lastNameEl);
+        }
+        break;
+      case "email":
+        if (inputContent.trim() === "" || !emailRegex.test(emailEl.value)) {
+          displayErrorMessages(emailEl, erroMessagesList.email, "error");
+        } else {
+          displayErrorMessages(emailEl, "", "valid");
+          showValidIndicator(emailEl);
+        }
+        break;
+    }
   }
 }
 
@@ -287,7 +294,8 @@ btnMerci.addEventListener("click", function event() {
  * @returns {boolean}
  */
 function validate() {
-  //e.preventDefault();
+  // Ici a la soumission je décalre la variable a true pour autoriser la validation en temps réel.
+  formFirstValidation = true;
 
   fullNameValidation(firstNameEl, "prénom");
   fullNameValidation(lastNameEl, "nom");
