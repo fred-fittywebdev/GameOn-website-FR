@@ -366,7 +366,7 @@ input[data-error]::after {
 .select-selected {
   color: #000000;
   padding: 11px 16px;
-  border: 1px solid transparent;
+  border: 1px solid;
   border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
   cursor: pointer;
   border-radius: 8px;
@@ -485,6 +485,43 @@ footer {
   padding-right: 2vw;
   margin: 0 20px;
 }
+
+/* Classes peronnelles. */
+.active {
+  display: block;
+}
+
+.inactive {
+  display: none;
+}
+
+.form-valid {
+  box-shadow: 0 0 0 4px #279e7a;
+}
+
+.hidden {
+  overflow: hidden;
+}
+
+/*message confirmation*/
+.message {
+  display: flex;
+  height: 677px;
+  text-align: center;
+  align-items: center;
+}
+
+@keyframes modalopen {
+  from {
+    opacity: 0;
+    transform: translateY(-150px);
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Media query */
 
 @media screen and (max-width: 1050px) {
   .topnav {
@@ -656,10 +693,6 @@ footer {
     background-color: #fff;
   }
 
-  /*.header-logo img {*/
-  /*  padding: 0;*/
-  /*}*/
-
   .main-navbar {
     margin-top: 15px;
   }
@@ -692,35 +725,9 @@ footer {
   .hero-section .btn-signup {
     font-size: 13px;
   }
-}
 
-/* Classes peronnelles. */
-.active {
-  display: block;
-}
-
-.inactive {
-  display: none;
-}
-
-.form-valid {
-  box-shadow: 0 0 0 4px #279e7a;
-}
-
-/*message confirmation*/
-.message {
-  display: flex;
-  height: 677px;
-  text-align: center;
-  align-items: center;
-}
-
-@keyframes modalopen {
-  from {
-    opacity: 0;
-    transform: translateY(-150px);
-  }
-  to {
-    opacity: 1;
+  .bground {
+    background-color: transparent;
+    top: 60px;
   }
 }

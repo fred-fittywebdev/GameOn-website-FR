@@ -1,4 +1,5 @@
 // Eléments du DOM et variables -> modale
+bodyEl = document.querySelector("body");
 const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const modalCloseEl = document.querySelector(".close");
@@ -37,6 +38,8 @@ function initMessages() {
 
 // Fonction permettant d'ouvrir la modale.
 function launchModal() {
+  window.scrollTo(0, 0);
+  bodyEl.classList.add("hidden");
   modalbg.style.display = "block";
 }
 
@@ -44,6 +47,7 @@ function launchModal() {
 function closeModal() {
   initMessages();
   formEl.reset();
+  bodyEl.classList.remove("hidden");
   modalbg.style.display = "none";
 }
 
