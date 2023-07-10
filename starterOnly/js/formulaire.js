@@ -23,7 +23,6 @@ let formFirstValidation = false;
 // Variable pour définir un age limite par rapport a une date, ici je choisis 14 ans donc 2007
 // Je ne récupère que la date au format AAAA-MM-DD
 const ageLimite = new Date("2010-01-01").toISOString().slice(0, 10);
-console.log(ageLimite);
 
 // Variables pour les expressions régulières.
 const fullNameRegex = /^[A-Za-zÀ-ÿ -]+$/;
@@ -137,13 +136,42 @@ function inputsTextLiveValidation(e) {
           showValidIndicator(emailEl);
         }
         break;
+      case "quantity":
+        if (
+          inputContent.value.trim() === "" ||
+          !quantityRegex.test(inputContent.value)
+        ) {
+          displayErrorMessages(quantityEl, erroMessagesList.nbTournoi, "error");
+        } else {
+          displayErrorMessages(quantityEl, "", "valid");
+          showValidIndicator(quantityEl);
+        }
+        break;
     }
   }
 }
 
 // ici on boucle sur les trois inputs nom, prénom et email afin de faire les validations dans la fonction au dessus.
 inputs.forEach((input) => {
-  input.addEventListener("keyup", inputsTextLiveValidation);
+  input.addEventListener("input", inputsTextLiveValidation);
+});
+
+// ici on valide en temps réel les conditions d'utilisation.
+checkboxEl.addEventListener("click", function () {
+  checkboxValidation();
+});
+
+// Ici on valide en temps réel le choix d'une ville.
+btnRadiosEl.forEach((btnRadio) => {
+  btnRadio.addEventListener("click", function () {
+    cityValidation();
+  });
+});
+
+// Ici on valide en temps réel la date d'anniversaire.
+birthdateEl.addEventListener("change", function () {
+  birthdateValidation();
+  showValidIndicator(birthdateEl);
 });
 
 /**
