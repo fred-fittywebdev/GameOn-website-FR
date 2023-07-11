@@ -79,7 +79,7 @@ function showValidIndicator(inputCheck) {
   // remove visual indicator
   setTimeout(() => {
     inputCheck.classList.remove("form-valid");
-  }, 2000);
+  }, 1000);
 }
 
 /**
@@ -138,6 +138,7 @@ function inputsTextLiveValidation(e) {
         break;
       case "quantity":
         if (
+          // TODO vérifier quela valeur entrée est un chiffre
           inputContent.value.trim() === "" ||
           !quantityRegex.test(inputContent.value)
         ) {
@@ -157,21 +158,22 @@ inputs.forEach((input) => {
 });
 
 // ici on valide en temps réel les conditions d'utilisation.
-checkboxEl.addEventListener("click", function () {
+checkboxEl.addEventListener("input", function () {
+  // alert("valide");
   checkboxValidation();
 });
 
 // Ici on valide en temps réel le choix d'une ville.
 btnRadiosEl.forEach((btnRadio) => {
-  btnRadio.addEventListener("click", function () {
+  btnRadio.addEventListener("input", function () {
     cityValidation();
   });
 });
 
 // Ici on valide en temps réel la date d'anniversaire.
-birthdateEl.addEventListener("change", function () {
+birthdateEl.addEventListener("input", function () {
+  // alert("Date valide");
   birthdateValidation();
-  showValidIndicator(birthdateEl);
 });
 
 /**
@@ -203,6 +205,7 @@ function birthdateValidation() {
     displayErrorMessages(birthdateEl, erroMessagesList.birthdayDate, "error");
   } else {
     displayErrorMessages(birthdateEl, "", "valid");
+    showValidIndicator(birthdateEl);
     return true;
   }
 }
@@ -311,9 +314,9 @@ btnMerci.addEventListener("click", function event() {
   // form.className = 'Active';
   //Masquer le message
   messageRemerciement.className = "inactive";
+  formEl.className = "active";
   // forcer la fermeture de la modale
   closeModal();
-  formEl.submit();
 });
 
 /**

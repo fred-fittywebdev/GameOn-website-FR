@@ -30,12 +30,13 @@ function editNav() {
  * Permet de supprimer les message d'erreur et la bordure rouge autour des inputs.
  */
 function initMessages() {
+  formEl.classList.add("active");
   formData.forEach((formD) => {
     formD.setAttribute("data-error", "");
     formD.setAttribute("data-error-visible", false);
   });
 }
-
+// TODO AJouter la jsdoc et enlever le onclick editnav()
 // Fonction permettant d'ouvrir la modale.
 function launchModal() {
   window.scrollTo(0, 0);
