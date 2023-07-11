@@ -11,7 +11,10 @@ const iconeMenuEl = document.getElementById("icon");
 /*
 ---------- NAVIGATION COMPONENT ----------
 */
-// Fonction permettant l'ajout de la classe 'responsive' pour gérer le menu en version mobile.
+
+/**
+ *  Permet d'ouvrir et de fermer le manu au click sur l'icone en mode responsive.
+ */
 function editNav() {
   if (navigation.className === "topnav") {
     navigation.className += " responsive";
@@ -40,19 +43,27 @@ function initMessages() {
     formD.setAttribute("data-error-visible", false);
   });
 }
-// TODO AJouter la jsdoc et enlever le onclick editnav()
-// Fonction permettant d'ouvrir la modale.
+
+/**
+ * Permet d'ouvrir la modale et de gérer l'overflow du body lorsque celle-ci est ouverte
+ * Cela permet de ne pas povoir scroller lorsque la navigation est ouverte.
+ */
 function launchModal() {
   window.scrollTo(0, 0);
   bodyEl.classList.add("hidden");
   modalbg.style.display = "block";
 }
 
-// Fonction permettant de fermer la modale.
+/**
+ *  Permet de fermer la modale
+ *  Si la modale est fermée en cours de remplissage, cela vide le formulaire et enlève les messages d'erreurs.
+ */
 function closeModal() {
   initMessages();
   formEl.reset();
   bodyEl.classList.remove("hidden");
+  messageRemerciement.className = "inactive";
+  formEl.className = "active";
   modalbg.style.display = "none";
 }
 
@@ -64,4 +75,35 @@ modalCloseEl.addEventListener("click", closeModal);
 
 /*
 ---------- END MODAL  COMPONENT ----------
+*/
+
+/*
+---------- MODAL REMERCIEMENT COMPONENT ----------
+*/
+
+/**
+ * Fonction pour faire apparaître la modale de confirmation
+ */
+function modalRemerciement() {
+  //Masquer le formulaire d'origine
+  formEl.className = "inactive";
+
+  //Afficher le message et le bouton de fermeture
+  messageRemerciement.className = "active";
+
+  //Masque le bouton pour fermer la fenêtre car si utilisateur clique dessus, pas de submit()
+  // modalCloseEl.className = "inactive";
+}
+
+btnMerci.addEventListener("click", function event() {
+  //Masquer le message
+  messageRemerciement.className = "inactive";
+  // réactivation du formulaire initial.
+  formEl.className = "active";
+  //fermeture de la modale
+  closeModal();
+});
+
+/*
+---------- END MODAL REMERCIEMENT  COMPONENT ----------
 */

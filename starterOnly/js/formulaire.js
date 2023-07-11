@@ -296,30 +296,6 @@ function checkboxValidation() {
 }
 
 /**
- * Fonction pour faire apparaître la modale de confirmation
- */
-function modalRemerciement() {
-  //Masquer le formulaire d'origine
-  formEl.className = "inactive";
-
-  //Afficher le message et le bouton de fermeture
-  messageRemerciement.className = "active";
-
-  //Masque le bouton pour fermer la fenêtre car si utilisateur clique dessus, pas de submit()
-  modalCloseEl.className = "inactive";
-}
-
-btnMerci.addEventListener("click", function event() {
-  //Réactiver le formulaire d'origine --> pas besoin puisque lors du lancement de la modale, display : block
-  // form.className = 'Active';
-  //Masquer le message
-  messageRemerciement.className = "inactive";
-  formEl.className = "active";
-  // forcer la fermeture de la modale
-  closeModal();
-});
-
-/**
  * Fonction validate lancée lors de la soumission du formulaire.
  *
  * @returns {boolean}
