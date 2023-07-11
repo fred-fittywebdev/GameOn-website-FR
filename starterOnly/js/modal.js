@@ -6,6 +6,7 @@ const modalCloseEl = document.querySelector(".close");
 const formData = document.querySelectorAll(".formData");
 // Eléments du DOM et variables -> navigation
 let navigation = document.getElementById("myTopnav");
+const iconeMenuEl = document.getElementById("icon");
 
 /*
 ---------- NAVIGATION COMPONENT ----------
@@ -18,6 +19,9 @@ function editNav() {
     navigation.className = "topnav";
   }
 }
+
+iconeMenuEl.addEventListener("click", editNav);
+
 /*
 ---------- END NAVIGATION  COMPONENT ----------
 */
