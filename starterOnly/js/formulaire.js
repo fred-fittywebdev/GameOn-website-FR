@@ -139,8 +139,9 @@ function inputsTextLiveValidation(e) {
       case "quantity":
         if (
           // TODO vérifier quela valeur entrée est un chiffre
-          inputContent.value.trim() === "" ||
-          !quantityRegex.test(inputContent.value)
+          // inputContent.value.trim() === ""
+          !parseInt(inputContent.value)
+          // !quantityRegex.test(inputContent.value)
         ) {
           displayErrorMessages(quantityEl, erroMessagesList.nbTournoi, "error");
         } else {
@@ -216,7 +217,9 @@ function birthdateValidation() {
  * @returns {boolean}
  */
 function quantityValidation() {
-  if (quantityEl.value.trim() === "" || !quantityRegex.test(quantityEl.value)) {
+  // if (quantityEl.value.trim() === "" || !quantityRegex.test(quantityEl.value)) {
+  if (!parseInt(quantityEl.value)) {
+    alert("nan");
     displayErrorMessages(quantityEl, erroMessagesList.nbTournoi, "error");
   } else {
     displayErrorMessages(quantityEl, "", "valid");
@@ -236,7 +239,9 @@ let invalidChars = ["-", "+", "e", "."];
  * @param e permet de détecter la touche qui est enfoncée, et anisi de récupérer la valeur de key
  */
 function onlyNumber(e) {
-  if (invalidChars.includes(e.key) || !quantityRegex.test(e.key)) {
+  // if (invalidChars.includes(e.key) || !quantityRegex.test(e.key)) {
+  if (!parseInt(quantityEl.value)) {
+    console.log(typeof parseInt(quantityEl.value));
     displayErrorMessages(quantityEl, erroMessagesList.nbTournoi, "error");
   } else {
     displayErrorMessages(quantityEl, "", "valid");
@@ -244,9 +249,8 @@ function onlyNumber(e) {
   }
 }
 
-quantityEl.addEventListener("keydown", onlyNumber);
+quantityEl.addEventListener("input", onlyNumber);
 
-// TODO: vérifier les selecteurs.
 /**
  * Fonction pour valider les boutons radio et vérifier qu'au moins une ville à éré selectionnée.
  *

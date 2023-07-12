@@ -674,6 +674,8 @@ footer {
   .topnav.responsive .main-navbar {
     margin-top: 40px;
     margin-right: 0;
+    z-index: 2;
+    background-color: #fff;
   }
 
   .topnav.responsive a {
