@@ -20,7 +20,7 @@ const btnMerci = document.getElementById("btn-merci");
 // La validation en temps réel ne se fera que lorsque celui ci aura été soumis au moins une fois si nécéssaire.
 let formFirstValidation = false;
 
-// Variable pour définir un age limite par rapport a une date, ici je choisis 14 ans donc 2007
+// Variable pour définir un age limite par rapport a une date, ici je choisis 14 ans donc 2009
 // Je ne récupère que la date au format AAAA-MM-DD
 const ageLimite = new Date("2010-01-01").toISOString().slice(0, 10);
 
@@ -33,7 +33,7 @@ const emailRegex = /^([a-z\d\.-_]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/i;
 // /^(?:(?:19|20)\d{2}[-](?:0?[1-9]|1[012])[-](?:0[1-9]|[12]\d|3[01])|(?:0?[1-9]|[12]\d|3[01])/(?:0?[1-9]|1[012])/(?:19|20)\d{2})$/
 const birthdateRegex =
   /^(19\d{2}|2[0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
-const quantityRegex = /^[0-9]$/;
+// const quantityRegex = /^[0-9]$/;
 
 // Récupération du formulaire pour gérer la soumission et lancer la focntion validate() onSubmit
 formEl.addEventListener("submit", function (e) {
@@ -86,15 +86,19 @@ function showValidIndicator(inputCheck) {
  * fonction pour valider le prénom et le nom de l'utilisateur
  *
  * @param inputValue permet d'utiliser le prénom et le nom avec la même focntion
- * @param infos {string} on passe soit "prenom" soit "nom" pour adapter le message d'erreur.
  * @returns {boolean}
  */
-function fullNameValidation(inputValue, infos) {
-  if (inputValue.value.trim() === "" || !fullNameRegex.test(inputValue.value)) {
+function fullNameValidation(inputValue) {
+  if (
+    inputValue.value.trim() === "" ||
+    inputValue.value.length < 2 ||
+    !fullNameRegex.test(inputValue.value)
+  ) {
     displayErrorMessages(inputValue, erroMessagesList.fullName, "error");
   } else {
     // Sinon, on enlève l'attribut "data-error-visible"
     displayErrorMessages(inputValue, "", "valid");
+    showValidIndicator(inputValue);
     return true;
   }
 }
@@ -102,53 +106,37 @@ function fullNameValidation(inputValue, infos) {
 /**
  * Ici on récupère l'attribut name de l'input dans lequel on entre des données.
  * On utilise un switch pour detecter et implémenter l'affichage des erreurs en live.
- * Cette validation ne se fait que lorsqu'on tape quelque chose dans un des deux inputs.
+ * Cette validation ne se fait que lorsqu'on tape quelque chose dans un des inputs.
  *
  * @param e permet de récuperer l'attribut name des deux inputs.
  */
 function inputsTextLiveValidation(e) {
-  let inputContent = e.target.value;
+  // let inputContent = e.target.value;
 
   // Si une tentative de soumission du formulaire n'a pas encore été faite la validation en temps réel ne s'exécute pas.
   if (formFirstValidation) {
     switch (e.target.name) {
       case "first":
-        if (inputContent.length < 2 || !fullNameRegex.test(inputContent)) {
-          displayErrorMessages(firstNameEl, erroMessagesList.fullName, "error");
-        } else {
-          displayErrorMessages(firstNameEl, "", "valid");
-          showValidIndicator(firstNameEl);
-        }
+        fullNameValidation(firstNameEl);
         break;
       case "last":
-        if (inputContent.length < 2 || !fullNameRegex.test(inputContent)) {
-          displayErrorMessages(lastNameEl, erroMessagesList.fullName, "error");
-        } else {
-          displayErrorMessages(lastNameEl, "", "valid");
-          showValidIndicator(lastNameEl);
-        }
+        fullNameValidation(lastNameEl);
         break;
       case "email":
-        if (inputContent.trim() === "" || !emailRegex.test(emailEl.value)) {
-          displayErrorMessages(emailEl, erroMessagesList.email, "error");
-        } else {
-          displayErrorMessages(emailEl, "", "valid");
-          showValidIndicator(emailEl);
-        }
+        emailValidation();
+        break;
+      case "birthdate":
+        birthdateValidation();
         break;
       case "quantity":
-        if (
-          // TODO vérifier quela valeur entrée est un chiffre
-          // inputContent.value.trim() === ""
-          !parseInt(inputContent.value)
-          // !quantityRegex.test(inputContent.value)
-        ) {
-          displayErrorMessages(quantityEl, erroMessagesList.nbTournoi, "error");
-        } else {
-          displayErrorMessages(quantityEl, "", "valid");
-          showValidIndicator(quantityEl);
-        }
+        // onlyNumber();
+        quantityValidation();
         break;
+      case "location":
+        cityValidation();
+        break;
+      case "checkbox1":
+        checkboxValidation();
     }
   }
 }
@@ -156,25 +144,6 @@ function inputsTextLiveValidation(e) {
 // ici on boucle sur les trois inputs nom, prénom et email afin de faire les validations dans la fonction au dessus.
 inputs.forEach((input) => {
   input.addEventListener("input", inputsTextLiveValidation);
-});
-
-// ici on valide en temps réel les conditions d'utilisation.
-checkboxEl.addEventListener("input", function () {
-  // alert("valide");
-  checkboxValidation();
-});
-
-// Ici on valide en temps réel le choix d'une ville.
-btnRadiosEl.forEach((btnRadio) => {
-  btnRadio.addEventListener("input", function () {
-    cityValidation();
-  });
-});
-
-// Ici on valide en temps réel la date d'anniversaire.
-birthdateEl.addEventListener("input", function () {
-  // alert("Date valide");
-  birthdateValidation();
 });
 
 /**
@@ -187,6 +156,7 @@ function emailValidation() {
     displayErrorMessages(emailEl, erroMessagesList.email, "error");
   } else {
     displayErrorMessages(emailEl, "", "valid");
+    showValidIndicator(emailEl);
     return true;
   }
 }
@@ -218,38 +188,14 @@ function birthdateValidation() {
  */
 function quantityValidation() {
   // if (quantityEl.value.trim() === "" || !quantityRegex.test(quantityEl.value)) {
-  if (!parseInt(quantityEl.value)) {
-    alert("nan");
-    displayErrorMessages(quantityEl, erroMessagesList.nbTournoi, "error");
-  } else {
-    displayErrorMessages(quantityEl, "", "valid");
-    return true;
-  }
-}
-
-// Empêcher la possibilité de taper les caractères suivants dans l'input: -, +, e, .
-
-// Je crée un tableau avec les valeurs que je veux interdire
-let invalidChars = ["-", "+", "e", "."];
-
-/**
- * Fonction qui determine si la touche enfoncée correspond aux caractères inclus dans la variable invlaidChars
- * Si c'est le cas on annule l'évenement par défaut qui est l'affichage du caractère correspondant a la clé
- *
- * @param e permet de détecter la touche qui est enfoncée, et anisi de récupérer la valeur de key
- */
-function onlyNumber(e) {
-  // if (invalidChars.includes(e.key) || !quantityRegex.test(e.key)) {
-  if (!parseInt(quantityEl.value)) {
-    console.log(typeof parseInt(quantityEl.value));
-    displayErrorMessages(quantityEl, erroMessagesList.nbTournoi, "error");
-  } else {
+  if (parseInt(quantityEl.value) || quantityEl.value === "0") {
     displayErrorMessages(quantityEl, "", "valid");
     showValidIndicator(quantityEl);
+    return true;
+  } else {
+    displayErrorMessages(quantityEl, erroMessagesList.nbTournoi, "error");
   }
 }
-
-quantityEl.addEventListener("input", onlyNumber);
 
 /**
  * Fonction pour valider les boutons radio et vérifier qu'au moins une ville à éré selectionnée.
@@ -308,8 +254,8 @@ function validate() {
   // Ici a la soumission je décalre la variable a true pour autoriser la validation en temps réel.
   formFirstValidation = true;
 
-  fullNameValidation(firstNameEl, "prénom");
-  fullNameValidation(lastNameEl, "nom");
+  fullNameValidation(firstNameEl);
+  fullNameValidation(lastNameEl);
   emailValidation();
   birthdateValidation();
   quantityValidation();
@@ -317,8 +263,8 @@ function validate() {
   checkboxValidation();
 
   if (
-    fullNameValidation(firstNameEl, "prénom") &&
-    fullNameValidation(lastNameEl, "nom") &&
+    fullNameValidation(firstNameEl) &&
+    fullNameValidation(lastNameEl) &&
     emailValidation() &&
     birthdateValidation() &&
     quantityValidation() &&
