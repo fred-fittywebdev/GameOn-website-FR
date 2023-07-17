@@ -13,7 +13,7 @@ const iconeMenuEl = document.getElementById("icon");
 */
 
 /**
- *  Permet d'ouvrir et de fermer le manu au click sur l'icone en mode responsive.
+ *  Permet d'ouvrir et de fermer le menu au click sur l'icone en mode responsive sur tablette et smartphone.
  */
 function editNav() {
   if (navigation.className === "topnav") {
@@ -39,8 +39,8 @@ iconeMenuEl.addEventListener("click", editNav);
 function initMessages() {
   formEl.classList.add("active");
   formData.forEach((formD) => {
-    formD.setAttribute("data-error", "");
-    formD.setAttribute("data-error-visible", false);
+    formD.removeAttribute("data-error");
+    formD.setAttribute("data-error-visible", "false");
   });
 }
 
@@ -90,9 +90,6 @@ function modalRemerciement() {
 
   //Afficher le message et le bouton de fermeture
   messageRemerciement.className = "active";
-
-  //Masque le bouton pour fermer la fenêtre car si utilisateur clique dessus, pas de submit()
-  // modalCloseEl.className = "inactive";
 }
 
 btnMerci.addEventListener("click", function event() {

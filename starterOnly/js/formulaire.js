@@ -21,21 +21,21 @@ const btnMerci = document.getElementById("btn-merci");
 let formFirstValidation = false;
 
 // Variable pour définir un age limite par rapport a une date, ici je choisis 14 ans donc 2009
-// Je ne récupère que la date au format AAAA-MM-DD
+// Je ne récupère que la date au format AAAA-MM-DD grâce au slice qui me permet de ne pas prendre en compte l'heure, les minutes et les secondes.
 const ageLimite = new Date("2010-01-01").toISOString().slice(0, 10);
 
 // Variables pour les expressions régulières.
+// Autorise dans le chmap les caractères uniquement des caractères, ceux-ci peuvent être répétés et le prénom peut contnier un -
 const fullNameRegex = /^[A-Za-zÀ-ÿ -]+$/;
 // On autorise toutes les lettres, nombres, point, tirets et underscore avant le @, puis toutes les lettres, nombres et tirets avant le . toutes les lettres, idem pour l'extension optionnelle.
 // regex universelle /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
-const emailRegex = /^([a-z\d\.-_]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/i;
-// On crée plusieurs groupe pour autoriser les différents chiffres possible dans une date, les slash, et on contrôle que la date ne dépasse pas 4 chiffres.
-// /^(?:(?:19|20)\d{2}[-](?:0?[1-9]|1[012])[-](?:0[1-9]|[12]\d|3[01])|(?:0?[1-9]|[12]\d|3[01])/(?:0?[1-9]|1[012])/(?:19|20)\d{2})$/
+const emailRegex = /^([a-z\d.-_]+)@([a-z\d-]+)\.([a-z]{2,8})(\.[a-z]{2,8})?$/i;
+// On crée plusieurs groupe pour autoriser les différents chiffres possible dans une date.
 const birthdateRegex =
   /^(19\d{2}|2[0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
 // const quantityRegex = /^[0-9]$/;
 
-// Récupération du formulaire pour gérer la soumission et lancer la focntion validate() onSubmit
+// Récupération du formulaire pour gérer la soumission et lancer la fonction validate() onSubmit
 formEl.addEventListener("submit", function (e) {
   e.preventDefault();
 
@@ -61,25 +61,25 @@ const erroMessagesList = {
 function displayErrorMessages(parentNode, message, check) {
   if (check === "error") {
     parentNode.parentElement.setAttribute("data-error", message);
-    parentNode.parentElement.setAttribute("data-error-visible", true);
+    parentNode.parentElement.setAttribute("data-error-visible", "true");
   } else {
-    parentNode.parentElement.setAttribute("data-error-visible", false);
+    parentNode.parentElement.removeAttribute("data-error-visible");
   }
 }
 
 /**
- * Permet d'afficher un indicateur visuel vert pendant 2 secondes lorsque les consignes de validations sont respectées
+ * Permet d'afficher un indicateur visuel vert pendant .5 secondes lorsque les consignes de validations sont respectées
  *
  * @param inputCheck correspond a l'inpuit sur lequel on veut afficher cet indicateur.
  */
 function showValidIndicator(inputCheck) {
-  // show valid indicator
+  // Affiche l'indicateur visuel
   inputCheck.classList.add("form-valid");
 
-  // remove visual indicator
+  // Enlève l'indicateur visuel au bout de 0.5 secondes
   setTimeout(() => {
     inputCheck.classList.remove("form-valid");
-  }, 1000);
+  }, 500);
 }
 
 /**
@@ -90,13 +90,14 @@ function showValidIndicator(inputCheck) {
  */
 function fullNameValidation(inputValue) {
   if (
+    // Si le chmap est soit vide, soit inférieur à 2 caractères, soit non coforme a la regex, on affiche le message d'erreur.
     inputValue.value.trim() === "" ||
     inputValue.value.length < 2 ||
     !fullNameRegex.test(inputValue.value)
   ) {
     displayErrorMessages(inputValue, erroMessagesList.fullName, "error");
   } else {
-    // Sinon, on enlève l'attribut "data-error-visible"
+    // Sinon, on enlève l'attribut "data-error-visible", donc le message d'erreur.
     displayErrorMessages(inputValue, "", "valid");
     showValidIndicator(inputValue);
     return true;
@@ -105,14 +106,12 @@ function fullNameValidation(inputValue) {
 
 /**
  * Ici on récupère l'attribut name de l'input dans lequel on entre des données.
- * On utilise un switch pour detecter et implémenter l'affichage des erreurs en live.
+ * On utilise un switch pour detecter ce nom et implémenter l'affichage des erreurs en live.
  * Cette validation ne se fait que lorsqu'on tape quelque chose dans un des inputs.
  *
  * @param e permet de récuperer l'attribut name des deux inputs.
  */
 function inputsTextLiveValidation(e) {
-  // let inputContent = e.target.value;
-
   // Si une tentative de soumission du formulaire n'a pas encore été faite la validation en temps réel ne s'exécute pas.
   if (formFirstValidation) {
     switch (e.target.name) {
@@ -141,7 +140,7 @@ function inputsTextLiveValidation(e) {
   }
 }
 
-// ici on boucle sur les trois inputs nom, prénom et email afin de faire les validations dans la fonction au dessus.
+// ici on boucle sur les inputs du formulaire afin de mettre en place une validation instantannée grâce a la fonction inputsTextLiveValidation.
 inputs.forEach((input) => {
   input.addEventListener("input", inputsTextLiveValidation);
 });
@@ -152,6 +151,7 @@ inputs.forEach((input) => {
  * @returns {boolean}
  */
 function emailValidation() {
+  // Si l'email est vide ou ne correspond pas a l'expression régulière on affiche l'erreur.
   if (emailEl.value.trim() === "" || !emailRegex.test(emailEl.value)) {
     displayErrorMessages(emailEl, erroMessagesList.email, "error");
   } else {
@@ -162,12 +162,13 @@ function emailValidation() {
 }
 
 /**
- * fonction pour vérifier que la date soit présente, valide et pas dans le futur.
+ * fonction pour vérifier que la date soit présente, valide, pas dans le futur et que la personne est au moin 14ans.
  *
  * @returns {boolean}
  */
 function birthdateValidation() {
   if (
+    // Si la date est vide, ne correspond pas a l'expression régulière, est dans le futur ou supérieure a 2009 on affiche une erreur.
     birthdateEl.value.trim() === "" ||
     !birthdateRegex.test(birthdateEl.value) ||
     birthdateEl.value > new Date().toISOString().slice(0, 10) ||
@@ -187,7 +188,7 @@ function birthdateValidation() {
  * @returns {boolean}
  */
 function quantityValidation() {
-  // if (quantityEl.value.trim() === "" || !quantityRegex.test(quantityEl.value)) {
+  // Si la méthode parseInt évalue la valeur entrée comme étant un nmobre, ou si on entre 0 pas d'erreur, la saisie est valide.
   if (parseInt(quantityEl.value) || quantityEl.value === "0") {
     displayErrorMessages(quantityEl, "", "valid");
     showValidIndicator(quantityEl);
@@ -203,9 +204,10 @@ function quantityValidation() {
  * @returns {boolean}
  */
 function cityValidation() {
-  // console.log(document.querySelector('input[name="location"]:checked'));
+  // On décalre une variable pour déterminer si un bouton radio est coché, faux au départ.
   let btnRadioChecked = false;
 
+  // On boucle sur les différents boutons radio pour voir si l'un d'entre eux est coché.
   for (let i = 0; i < btnRadiosEl.length; i++) {
     if (btnRadiosEl[i].checked) {
       btnRadioChecked = true;
@@ -220,6 +222,7 @@ function cityValidation() {
       "error"
     );
   } else {
+    // Si aucun n'est coché, on affiche le message d'erreur.
     displayErrorMessages(
       cityValidationEl,
       erroMessagesList.cityChoice,
@@ -229,14 +232,13 @@ function cityValidation() {
   }
 }
 
-cityValidationEl.addEventListener("change", function (e) {});
-
 /**
  * Fonction pour être sur que la case à cocher des conditions d'utilisation est checked
  *
  * @returns {boolean}
  */
 function checkboxValidation() {
+  // Si aucune cas n'est cochée, on affiche le message d'erreur.
   if (!checkboxEl.checked) {
     displayErrorMessages(checkboxEl, erroMessagesList.privacyPolicy, "error");
     return false;
@@ -254,6 +256,7 @@ function validate() {
   // Ici a la soumission je décalre la variable a true pour autoriser la validation en temps réel.
   formFirstValidation = true;
 
+  // J'execute mes différentes focntions de validations
   fullNameValidation(firstNameEl);
   fullNameValidation(lastNameEl);
   emailValidation();
@@ -263,6 +266,7 @@ function validate() {
   checkboxValidation();
 
   if (
+    // Si il n'y a pas d'erreur lors de l'execution des ces focntions de validations ( toutes ) on soumet le formulaire.
     fullNameValidation(firstNameEl) &&
     fullNameValidation(lastNameEl) &&
     emailValidation() &&
@@ -271,6 +275,7 @@ function validate() {
     cityValidation() &&
     checkboxValidation()
   ) {
+    // On affiche la modale avec le message de remerciement.
     modalRemerciement();
     return true;
   } else {
