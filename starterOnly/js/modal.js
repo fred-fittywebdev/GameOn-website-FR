@@ -8,10 +8,6 @@ const formData = document.querySelectorAll(".formData");
 let navigation = document.getElementById("myTopnav");
 const iconeMenuEl = document.getElementById("icon");
 
-/*
----------- NAVIGATION COMPONENT ----------
-*/
-
 /**
  *  Permet d'ouvrir et de fermer le menu au click sur l'icone en mode responsive sur tablette et smartphone.
  */
@@ -24,14 +20,6 @@ function editNav() {
 }
 
 iconeMenuEl.addEventListener("click", editNav);
-
-/*
----------- END NAVIGATION  COMPONENT ----------
-*/
-
-/*
----------- MODAL COMPONENT ----------
-*/
 
 /**
  * Permet de supprimer les message d'erreur et la bordure rouge autour des inputs.
@@ -73,14 +61,6 @@ modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 // Evenements pour la fermeture de la modale au click sur la croix..
 modalCloseEl.addEventListener("click", closeModal);
 
-/*
----------- END MODAL  COMPONENT ----------
-*/
-
-/*
----------- MODAL REMERCIEMENT COMPONENT ----------
-*/
-
 /**
  * Fonction pour faire apparaître la modale de confirmation
  */
@@ -100,7 +80,3 @@ btnMerci.addEventListener("click", function event() {
   //fermeture de la modale
   closeModal();
 });
-
-/*
----------- END MODAL REMERCIEMENT  COMPONENT ----------
-*/

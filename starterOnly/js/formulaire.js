@@ -1,7 +1,3 @@
-/*
----------- FORM COMPONENT ----------
-*/
-
 // Elements du DOM et variables
 const formEl = document.getElementById("form");
 const firstNameEl = document.querySelector("#first");
@@ -92,7 +88,7 @@ function fullNameValidation(inputValue) {
   if (
     // Si le chmap est soit vide, soit inférieur à 2 caractères, soit non coforme a la regex, on affiche le message d'erreur.
     inputValue.value.trim() === "" ||
-    inputValue.value.length < 2 ||
+    inputValue.value.trim().length < 2 ||
     !fullNameRegex.test(inputValue.value)
   ) {
     displayErrorMessages(inputValue, erroMessagesList.fullName, "error");
@@ -188,8 +184,9 @@ function birthdateValidation() {
  * @returns {boolean}
  */
 function quantityValidation() {
-  // Si la méthode parseInt évalue la valeur entrée comme étant un nmobre, ou si on entre 0 pas d'erreur, la saisie est valide.
-  if (parseInt(quantityEl.value) || quantityEl.value === "0") {
+  console.log(!isNaN(parseInt(quantityEl.value)));
+  // Ici je vérifie que la valeur soit différente de NAN (not a number) ce qui me permet de prendre en compte 0
+  if (!isNaN(parseInt(quantityEl.value))) {
     displayErrorMessages(quantityEl, "", "valid");
     showValidIndicator(quantityEl);
     return true;
@@ -282,7 +279,3 @@ function validate() {
     return false;
   }
 }
-
-/*
----------- END FORM  COMPONENT ----------
-*/

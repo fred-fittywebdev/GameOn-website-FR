@@ -522,7 +522,7 @@ footer {
 
 /* Media query */
 
-@media screen and (max-width: 1050px) {
+@media screen and (max-width: 1024px) {
   .topnav {
     display: flex;
     justify-content: space-between;
@@ -625,37 +625,6 @@ footer {
   .topnav a.icon {
     float: right;
     display: block;
-  }
-
-  .topnav.responsive {
-    position: relative;
-  }
-
-  .topnav.responsive .icon {
-    position: absolute;
-    right: 0;
-    top: 0;
-  }
-
-  .topnav.responsive a {
-    float: none;
-    display: block;
-    text-align: left;
-  }
-
-  .topnav.responsive .main-navbar .fa-bars {
-    color: #fff;
-  }
-}
-
-@media screen and (max-width: 540px) {
-  .topnav a {
-    display: none;
-  }
-
-  .topnav a.icon {
-    float: right;
-    display: block;
     margin-top: -15px;
   }
 
@@ -688,6 +657,8 @@ footer {
 
   .topnav.responsive a.icon {
     margin-top: 0;
+    background-color: #fe142f;
+    border-radius: 15px;
   }
 
   .topnav a:hover {
