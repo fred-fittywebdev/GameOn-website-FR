@@ -661,6 +661,11 @@ footer {
     border-radius: 15px;
   }
 
+  .topnav.responsive .header-logo {
+    align-self: start;
+    margin-top: 15px;
+  }
+
   .topnav a:hover {
     background-color: #fff;
   }

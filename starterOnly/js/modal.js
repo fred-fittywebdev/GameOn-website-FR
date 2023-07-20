@@ -1,5 +1,6 @@
 // Eléments du DOM et variables -> modale
 bodyEl = document.querySelector("body");
+heroSectionEl = document.querySelector(".hero-section");
 const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const modalCloseEl = document.querySelector(".close");
@@ -38,8 +39,8 @@ function initMessages() {
  */
 function launchModal() {
   window.scrollTo(0, 0);
-  bodyEl.classList.add("hidden");
   modalbg.style.display = "block";
+  heroSectionEl.style.display = "none";
 }
 
 /**
@@ -49,7 +50,7 @@ function launchModal() {
 function closeModal() {
   initMessages();
   formEl.reset();
-  bodyEl.classList.remove("hidden");
+  heroSectionEl.style.display = "block";
   messageRemerciement.className = "inactive";
   formEl.className = "active";
   modalbg.style.display = "none";
