@@ -50,7 +50,7 @@ function launchModal() {
 function closeModal() {
   initMessages();
   formEl.reset();
-  heroSectionEl.style.display = "block";
+  heroSectionEl.style.display = "grid";
   messageRemerciement.className = "inactive";
   formEl.className = "active";
   modalbg.style.display = "none";
